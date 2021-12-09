@@ -212,6 +212,47 @@ class Task:
             assert len(type_probabilities) == len(self.targets), \
                 f"Вероятности поражения {type_probabilities} для типа \"{type_name}\" не соответсвуют количеству целей"
 
+    def save_task(self, file_path: str):
+        """
+        Сохраняет задачу в заданный файл.
+
+        :param file_path: путь к файлу.
+        """
+        with open(file_path, "w") as file:
+            json.dump(
+                dict(
+                    targets=self.targets,
+                    targets_values=self.targets_values,
+                    weapon_types=self.weapon_types,
+                    weapon_types_amount=self.weapon_types_amount,
+                    weapon_types_success_probabilities=self.weapon_types_success_probabilities
+                ),
+                file
+            )
+
+    @staticmethod
+    def load_task(file_path: str):
+        """Загружает задачу из заданного файла."""
+        with open(file_path, "r") as file:
+            data = json.load(file)
+            try:
+                targets = data['targets']
+                targets_values = data['targets_values']
+                weapon_types = data['weapon_types']
+                weapon_types_amount = data['weapon_types_amount']
+                weapon_types_success_probabilities = data['weapon_types_success_probabilities']
+                task = Task(
+                    targets,
+                    targets_values,
+                    weapon_types,
+                    weapon_types_amount,
+                    weapon_types_success_probabilities
+                )
+                return task
+
+            except BaseException:
+                raise Exception("Wrong format")
+
     def add_target(self):
         """Добавляет одну новую цель"""
         return Task(
