@@ -251,7 +251,6 @@ class ApplicationWindow(QMainWindow):
         if file_name[len(file_name) - 4:] != "json":
             file_name = f"{file_name}.json"
         try:
-            print(file_name)
             self.task.save_task(file_name)
         except Exception as e:
             print(e)
@@ -265,7 +264,6 @@ class ApplicationWindow(QMainWindow):
             filter="Task file - *.json (*.json)"
         )[0]
         try:
-            print(file_name)
             self.change_task(Task.load_task(file_name))
         except Exception as e:
             print(e)
