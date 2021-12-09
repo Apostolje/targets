@@ -1,12 +1,12 @@
 from random import randint, uniform
-from typing import TypeVar, List, Tuple, Union
+from typing import TypeVar
 
 T = TypeVar('T')
 T1 = TypeVar('T1')
 T2 = TypeVar('T2')
 
 
-def max_value_index(lst: List[T]) -> Tuple[T, int]:
+def max_value_index(lst: list[T]) -> tuple[T, int]:
     """
     :param lst: список, в котором ищется максимальное значение
     :return: максимальное значение и индекс, по которому это значение находится
@@ -16,7 +16,7 @@ def max_value_index(lst: List[T]) -> Tuple[T, int]:
     return max_value, max_index
 
 
-def int_in_bounds(lower, higher) -> Tuple[int, int]:
+def int_in_bounds(lower, higher) -> tuple[int, int]:
     """
     :param higher: нижняя граница
     :param lower: верхняя граница
@@ -34,7 +34,7 @@ def int_in_bounds(lower, higher) -> Tuple[int, int]:
     return x, y
 
 
-def ints_in_bounds_ordered(lower: int, higher: int) -> Tuple[int, int]:
+def ints_in_bounds_ordered(lower: int, higher: int) -> tuple[int, int]:
     """
     :param lower: нижняя граница
     :param higher: верхняя граница
@@ -49,7 +49,7 @@ def ints_in_bounds_ordered(lower: int, higher: int) -> Tuple[int, int]:
         return x, y
 
 
-def random_coefficients(n: int) -> List[float]:
+def random_coefficients(n: int) -> list[float]:
     floats = [0, uniform(0, 1)]
     for i in range(n - 2):
         floats.append(uniform(floats[i + 1], 1))
@@ -59,50 +59,3 @@ def random_coefficients(n: int) -> List[float]:
     for i in range(len(floats) - 1):
         result.append(floats[i + 1] - floats[i])
     return result
-
-
-def invert_probabilities(success_probabilities: List[List[float]]) -> List[List[float]]:
-    """
-    :param success_probabilities: матрица вероятностей выполнения
-    :return: матрица вероятностей провала
-    """
-    return [
-        [1 - success_probability for success_probability in row]
-        for row in success_probabilities
-    ]
-
-
-def sort_related(lst1: List[T1],
-                 lst2: List[T2],
-                 reverse: bool = False) -> Tuple[List[T1], List[T2]]:
-    """
-    Возвращает сортированные версии заданных списков.
-    Сортируются списки по значениям 1го списка. Значения 2го списка связаны со значениями 1го.
-    """
-    lst1, lst2 = zip(*sorted(zip(lst1, lst2), key=lambda a: a[0], reverse=reverse))
-    return lst1, lst2
-
-
-def int_or_float(s: str) -> Union[int, float]:
-    try:
-        return int(s)
-    except ValueError:
-        return float(s)
-
-
-def parse_int_param(param_name: str, s: str) -> int:
-    try:
-        n = int(s)
-    except ValueError:
-        raise ValueError(f"Параметр {param_name} должен быть "
-                         f"целым числом! (задано значение {s})")
-    return n
-
-
-def parse_float_param(param_name: str, s: str) -> float:
-    try:
-        n = float(s)
-    except ValueError:
-        raise ValueError(f"Параметр {param_name} должен быть "
-                         f"вещественным числом! (задано значение {s})")
-    return n

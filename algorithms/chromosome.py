@@ -1,27 +1,35 @@
 import math
 from random import randint
-from typing import List
 
-from .targets import generate_random_solution
+from algorithms import Solution
 from .utils import random_coefficients, int_in_bounds, ints_in_bounds_ordered
 
 
 class Chromosome:
 
-    def __init__(self,
-                 targets_amount: int,
-                 weapons_total_amount: int,
-                 genes: List[int] = None):
+    def __init__(
+            self,
+            targets_amount: int,
+            weapons_total_amount: int | None = None,
+            genes: list[int] = None
+    ):
         """
         :param targets_amount: количество целей
         :param weapons_total_amount: общее число оружий всех типов
         """
-        self.targets_amount = targets_amount
-        self.weapons_total_amount = weapons_total_amount
         if genes is None:
-            self.genes = generate_random_solution(targets_amount, weapons_total_amount)
+            if weapons_total_amount is None:
+                raise ValueError
+
+            self.genes = Solution.generate_random_assignment(
+                targets_amount,
+                weapons_total_amount,
+                mutable=True
+            )
         else:
             self.genes = genes
+
+        self.targets_amount = targets_amount
 
     def __len__(self):
         return len(self.genes)
@@ -95,17 +103,7 @@ class Chromosome:
         child1_genes = [*parent1.genes[:start], *parent2.genes[start:end], *parent1.genes[end:]]
         child2_genes = [*parent2.genes[:start], *parent1.genes[start:end], *parent2.genes[end:]]
 
-        targets_amount = parent1.targets_amount
-        weapons_total_amount = parent1.weapons_total_amount
+        child1 = Chromosome(targets_amount=parent1.targets_amount, genes=child1_genes)
+        child2 = Chromosome(targets_amount=parent1.targets_amount, genes=child2_genes)
 
-        child1 = Chromosome(
-            targets_amount=targets_amount,
-            weapons_total_amount=weapons_total_amount,
-            genes=child1_genes
-        )
-        child2 = Chromosome(
-            targets_amount=targets_amount,
-            weapons_total_amount=weapons_total_amount,
-            genes=child2_genes
-        )
         return child1, child2

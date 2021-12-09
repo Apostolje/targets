@@ -1,35 +1,42 @@
 from copy import deepcopy
 from random import randint
-from typing import List, Tuple
 
 import math
 
-from .targets import generate_random_solution
+from algorithms import Solution
 from .utils import int_in_bounds, random_coefficients, ints_in_bounds_ordered
 
 
 class Antibody:
 
-    def __init__(self,
-                 targets_amount: int,
-                 weapons_total_amount: int,
-                 genes: List[int] = None):
+    def __init__(
+            self,
+            targets_amount: int,
+            weapons_total_amount: int | None = None,
+            genes: list[int] = None
+    ):
         """
         :param targets_amount: количество целей
         :param weapons_total_amount: общее число оружий всех типов
         """
-
-        self.targets_amount = targets_amount
-        self.weapons_total_amount = weapons_total_amount
         if genes is None:
-            self.genes = generate_random_solution(targets_amount, weapons_total_amount)
+            if weapons_total_amount is None:
+                raise ValueError
+
+            self.genes = Solution.generate_random_assignment(
+                targets_amount,
+                weapons_total_amount,
+                mutable=True
+            )
         else:
             self.genes = genes
+
+        self.targets_amount = targets_amount
 
     def __repr__(self):
         return str(self.genes)
 
-    def clones(self, n: int) -> List:
+    def clones(self, n: int) -> list:
         """
         :param n: количество клонов, которое нужно создать
         :return n клонов антитела
@@ -39,7 +46,7 @@ class Antibody:
             for _ in range(n)
         ]
 
-    def inverse(self, size: int, bounds: Tuple[int, int] = None):
+    def inverse(self, size: int, bounds: tuple[int, int] = None):
         """
         Оператор зеркальной мутации.
         В результате данной мутации часть генов антитела инвертируется.
@@ -64,13 +71,14 @@ class Antibody:
         b = a + size
         self.genes[a:b] = self.genes[a:b][::-1]
 
-    def swap(self, n: int, bounds: Tuple[int, int] = None):
+    def swap(self, n: int, bounds: tuple[int, int] = None):
         """
         Оператор обменной мутации.
         В результате данной мутации выполняется n обменов генов.
 
         :param n: количество обменов.
-        :param bounds: границы области, в которой выполняется мутация. По умолчанию мутация выполняется для всех генов.
+        :param bounds: границы области, в которой выполняется мутация.
+        По умолчанию мутация выполняется для всех генов.
         """
 
         if bounds is None:
@@ -83,14 +91,15 @@ class Antibody:
             a, b = int_in_bounds(start, stop)
             self.genes[a], self.genes[b] = self.genes[b], self.genes[a]
 
-    def random(self, n: int, bounds: Tuple[int, int] = None):
+    def random(self, n: int, bounds: tuple[int, int] = None):
         """
         Оператор случайной мутации.
         В результате данной мутации n генам присваивается случайное значение
         из отрезка [1, targets_amount].
 
         :param n: количество изменяемых генов.
-        :param bounds: границы области, в которой выполняется мутация. По умолчанию мутация выполняется для всех генов.
+        :param bounds: границы области, в которой выполняется мутация.
+        По умолчанию мутация выполняется для всех генов.
         """
         if bounds is None:
             start = 0

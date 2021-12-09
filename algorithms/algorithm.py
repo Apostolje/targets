@@ -1,9 +1,11 @@
+from algorithms import Solution
+
 from abc import ABC, abstractmethod
-from typing import Iterator, Tuple, List
+from typing import Iterator
 
 
 class Algorithm(ABC):
 
     @abstractmethod
-    def run(self) -> Iterator[Tuple[int, float, List[int]]]:
+    def run(self) -> Iterator[Solution]:
         ...

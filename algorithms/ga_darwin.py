@@ -4,7 +4,17 @@ import math
 
 from .chromosome import Chromosome
 from .ga import GeneticAlgorithm
-from .utils import sort_related
+
+
+def sort_related(lst1: list,
+                 lst2: list,
+                 reverse: bool = False) -> tuple[list, list]:
+    """
+    Возвращает сортированные версии заданных списков.
+    Сортируются списки по значениям 1го списка. Значения 2го списка связаны со значениями 1го.
+    """
+    lst1, lst2 = zip(*sorted(zip(lst1, lst2), key=lambda a: a[0], reverse=reverse))
+    return lst1, lst2
 
 
 class GADarwin(GeneticAlgorithm):

@@ -28,8 +28,8 @@ class GADeVries(GADarwin):
             for _ in range(n_deaths):
                 i = random.randrange(0, self.np)
                 c = Chromosome(
-                    targets_amount=self.targets_amount,
-                    weapons_total_amount=self.weapons_total_amount
+                    targets_amount=self.task.targets_amount,
+                    weapons_total_amount=self.task.weapons_total_amount
                 )
                 self.population[i] = c
                 # если у хромосомы изначально было известно ЦФ, то оно пересчитывается

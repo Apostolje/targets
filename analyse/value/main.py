@@ -1,6 +1,10 @@
+# TODO пофиксить Task
+# ЗАПУСКАТЬ ЧЕРЕЗ PYPY!
+
+
 import json
 
-from algorithms import generate_random_task, ImmuneAlgorithm, GADarwin, GADeVries
+from algorithms import Task, ImmuneAlgorithm, GADarwin, GADeVries
 
 FILE = "results.json"
 RUNS_PER_TASK = 10
@@ -11,19 +15,20 @@ MP = 0.20
 NI = 500
 
 tasks = [
-    generate_random_task(min_n_targets=n,
-                         max_n_targets=n,
-                         min_n_weapon_amount=1,
-                         max_n_weapon_amount=1,
-                         min_n_weapon_type=n,
-                         max_n_weapon_type=n,
-                         min_target_value=10,
-                         max_target_value=100,
-                         min_success_probability=0.1,
-                         max_success_probability=1.0)
+    Task.generate_random_task(
+        min_n_targets=n,
+        max_n_targets=n,
+        min_n_weapon_amount=1,
+        max_n_weapon_amount=1,
+        min_n_weapon_type=n,
+        max_n_weapon_type=n,
+        min_target_value=10,
+        max_target_value=100,
+        min_success_probability=0.1,
+        max_success_probability=1.0
+    )
     for n in range(10, 100 + 1, 10)
 ]
-
 
 bca = []
 for task in tasks:
