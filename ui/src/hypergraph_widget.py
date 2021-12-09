@@ -28,7 +28,7 @@ class HypergraphWidget(FigureCanvasQTAgg):
         ]
 
         # текущий способ отображения гиперграфа
-        self.visualizer = self.visualizers[1]
+        self.visualizer = self.visualizers[0]
 
     @property
     def axes(self) -> Axes:
