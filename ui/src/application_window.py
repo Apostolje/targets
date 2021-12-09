@@ -28,6 +28,8 @@ class ApplicationWindow(QMainWindow):
         self.ui.addWeaponButton.clicked.connect(self.add_weapon_type)
         self.ui.deleteWeaponButton.clicked.connect(self.delete_last_weapon_type)
 
+        self.ui.saveIntoFileButton.clicked.connect(self.save_task_into_file)
+        self.ui.loadFromFileButton.clicked.connect(self.load_task_from_file)
         self.ui.generateButton.clicked.connect(self.show_generation_window)
 
     def change_task(self, new_task: Task):
@@ -238,6 +240,35 @@ class ApplicationWindow(QMainWindow):
             on_data_change=self.handle_probabilities_change
         )
 
+    def save_task_into_file(self):
+        """Сохраняет условия задачи в файл."""
+        file_name = QFileDialog.getSaveFileName(
+            self,
+            'Сохранить условие в...',
+            '',
+            filter="Task file extension - *.json (*.json)"
+        )[0]
+        if file_name[len(file_name) - 4:] != "json":
+            file_name = f"{file_name}.json"
+        try:
+            print(file_name)
+            self.task.save_task(file_name)
+        except Exception as e:
+            print(e)
+
+    def load_task_from_file(self):
+        """Загрузает условия задачи из файла."""
+        file_name = QFileDialog.getOpenFileName(
+            self,
+            'Загрузить условия из...',
+            '',
+            filter="Task file - *.json (*.json)"
+        )[0]
+        try:
+            print(file_name)
+            self.change_task(Task.load_task(file_name))
+        except Exception as e:
+            print(e)
 
     @cached_property
     def ui_buttons(self) -> tuple[QPushButton, ...]:
@@ -248,6 +279,8 @@ class ApplicationWindow(QMainWindow):
             self.ui.deleteTargetButton,
             self.ui.addWeaponButton,
             self.ui.deleteWeaponButton,
+            self.ui.saveIntoFileButton,
+            self.ui.loadFromFileButton,
             self.ui.generateButton
         )
 
